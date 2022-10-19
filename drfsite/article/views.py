@@ -18,11 +18,32 @@ class ArticleAPIView(APIView):
     def post(self, request):
         serializer = ArticleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'article': serializer.data})
 
-        article_new = Article.objects.create(
-            title=request.data['title'],
-            content=request.data['content'],
-            cat_id=request.data['cat_id']
-        )
-        return Response({'article': ArticleSerializer(article_new).data})
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': "Method PUT not allowed"})
+        try:
+            instance = Article.objects.get(pk=pk)
+        except:
+            return Response({'error': "Object does not exists"})
 
+        serializer = ArticleSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'article': serializer.data})
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': "Method DELETE not allowed"})
+        try:
+            instance = Article.objects.get(pk=pk)
+        except:
+            return Response({'error': "Object does not exists"})
+
+        instance.delete()
+
+        return Response({'article': "delete article" + str(pk)})
