@@ -9,41 +9,53 @@ from .models import Article
 from .serializers import ArticleSerializer
 
 
-class ArticleAPIView(APIView):
+class ArticleAPIList(generics.ListCreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-    def get(self, request):
-        a = Article.objects.all()
-        return Response({"articles": ArticleSerializer(a, many=True).data})
+class ArticleAPIUpdate(generics.UpdateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-    def post(self, request):
-        serializer = ArticleSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'article': serializer.data})
+class ArticleAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({'error': "Method PUT not allowed"})
-        try:
-            instance = Article.objects.get(pk=pk)
-        except:
-            return Response({'error': "Object does not exists"})
 
-        serializer = ArticleSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'article': serializer.data})
-
-    def delete(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({'error': "Method DELETE not allowed"})
-        try:
-            instance = Article.objects.get(pk=pk)
-        except:
-            return Response({'error': "Object does not exists"})
-
-        instance.delete()
-
-        return Response({'article': "delete article" + str(pk)})
+# class ArticleAPIView(APIView):
+#     def get(self, request):
+#         a = Article.objects.all()
+#         return Response({"articles": ArticleSerializer(a, many=True).data})
+#
+#     def post(self, request):
+#         serializer = ArticleSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({'article': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({'error': "Method PUT not allowed"})
+#         try:
+#             instance = Article.objects.get(pk=pk)
+#         except:
+#             return Response({'error': "Object does not exists"})
+#
+#         serializer = ArticleSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({'article': serializer.data})
+#
+#     def delete(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({'error': "Method DELETE not allowed"})
+#         try:
+#             instance = Article.objects.get(pk=pk)
+#         except:
+#             return Response({'error': "Object does not exists"})
+#
+#         instance.delete()
+#
+#         return Response({'article': "delete article" + str(pk)})
