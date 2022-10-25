@@ -2,23 +2,33 @@ from django.forms import model_to_dict
 from django.shortcuts import render
 from django.views import generic
 from rest_framework import generics, viewsets, mixins
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from .models import Article
-from .serializers import ArticleSerializer
+from .models import *
+from .serializers import *
 
 
 class ArticleViewSet(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin,
-                   GenericViewSet):
+                     mixins.RetrieveModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
+                     mixins.ListModelMixin,
+                     GenericViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
+    # @action(methods=['get'], detail=False)
+    # def category(self, request):
+    #     categories = Category.objects.all()
+    #     return Response({'categories': [c.name for c in categories]})
+
+
+class CatsViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CatsSerializer
 
 # class ArticleAPIList(generics.ListCreateAPIView):
 #     queryset = Article.objects.all()

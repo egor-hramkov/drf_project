@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from article.models import Article
+from article.models import Article, Category
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -8,6 +8,11 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = "__all__"
 
+
+class CatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ("id", "name")
 
 # class ArticleSerializer(serializers.Serializer):
 #     title = serializers.CharField(max_length=100)
