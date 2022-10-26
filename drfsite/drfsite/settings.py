@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'article.apps.ArticleConfig',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken', #Авторизация по токенам
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -133,7 +135,14 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer'
     ],
+
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [ #Для авторизации
+        'rest_framework.authentication.TokenAuthentication', #Авторизация по токенам
+        'rest_framework.authentication.BasicAuthentication', #авторизации по сессии
+        'rest_framework.authentication.SessionAuthentication' #авторизации по сессии
     ]
 }

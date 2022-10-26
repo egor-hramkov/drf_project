@@ -4,6 +4,7 @@ from django.forms import model_to_dict
 from django.shortcuts import render
 from django.views import generic
 from rest_framework import generics, viewsets, mixins
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
@@ -44,6 +45,7 @@ class ArticleAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = (IsOwnerOrReadOnly,)
+    #authentication_classes = (TokenAuthentication,)
 
 class ArticleAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
