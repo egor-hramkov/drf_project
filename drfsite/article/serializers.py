@@ -4,6 +4,8 @@ from article.models import Article, Category
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Article
         fields = "__all__"

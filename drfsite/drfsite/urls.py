@@ -17,7 +17,7 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/v1/', include(router2.urls)),
 
-    # path('api/v1/articlelist/', ArticleAPIList.as_view()),
-    # path('api/v1/articlelist/<int:pk>', ArticleAPIUpdate.as_view()),
-    # path('api/v1/articledetail/<int:pk>', ArticleAPIDetailView.as_view()),
+    path('api/v1/articlelist/', ArticleAPIList.as_view()),
+    path('api/v1/articlelist/<int:pk>', ArticleAPIUpdate.as_view()),
+    path('api/v1/articledelete/<int:pk>', ArticleAPIDestroy.as_view()),
 ]

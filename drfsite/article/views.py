@@ -1,14 +1,19 @@
+from _ast import Is
+
 from django.forms import model_to_dict
 from django.shortcuts import render
 from django.views import generic
 from rest_framework import generics, viewsets, mixins
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from .models import *
+from .permissions import *
 from .serializers import *
+
 
 
 class ArticleViewSet(mixins.CreateModelMixin,
@@ -30,14 +35,21 @@ class CatsViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CatsSerializer
 
-# class ArticleAPIList(generics.ListCreateAPIView):
-#     queryset = Article.objects.all()
-#     serializer_class = ArticleSerializer
-#
-# class ArticleAPIUpdate(generics.UpdateAPIView):
-#     queryset = Article.objects.all()
-#     serializer_class = ArticleSerializer
-#
+class ArticleAPIList(generics.ListCreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+class ArticleAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+class ArticleAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = (ISAdminOrReadOnly,)
+
 # class ArticleAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Article.objects.all()
 #     serializer_class = ArticleSerializer
