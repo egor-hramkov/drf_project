@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/v1/articlelist/', ArticleAPIList.as_view()),
     path('api/v1/articlelist/<int:pk>', ArticleAPIUpdate.as_view()),
     path('api/v1/articledelete/<int:pk>', ArticleAPIDestroy.as_view()),
-    path('api/v1/auth-djoser', include('djoser.urls')), #Авторизация по токенам
+    path('api/v1/auth-djoser/', include('djoser.urls')), #Авторизация по токенам
     re_path(r'^auth/', include('djoser.urls.authtoken')), #Авторизация по токенам
     path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'), #Авторизация по JWT-токенам
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), #Авторизация по JWT-токенам

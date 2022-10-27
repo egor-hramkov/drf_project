@@ -6,6 +6,7 @@ from django.views import generic
 from rest_framework import generics, viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,7 +15,6 @@ from rest_framework.viewsets import GenericViewSet
 from .models import *
 from .permissions import *
 from .serializers import *
-
 
 
 class ArticleViewSet(mixins.CreateModelMixin,
@@ -36,17 +36,25 @@ class CatsViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CatsSerializer
 
+class ArticleAPIListPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class ArticleAPIList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = ArticleAPIListPagination
+
 
 class ArticleAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    #permission_classes = (IsOwnerOrReadOnly,)
+    # permission_classes = (IsOwnerOrReadOnly,)
     permission_classes = (IsAuthenticated,)
-    #authentication_classes = (TokenAuthentication,)
+    # authentication_classes = (TokenAuthentication,)
+
 
 class ArticleAPIDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
